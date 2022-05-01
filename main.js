@@ -8,6 +8,7 @@ let wave;
 let pixelRatio;
 let stageWidth;
 let stageHeight;
+let onDefault = true;
 let onWave = false;
 
 function setup() {
@@ -50,6 +51,7 @@ const changeToFreeze = () => {
 const changeToWave = () => {
 	wave = new Wave(dotGroup);
 	onWave = !onWave;
+	onDefault = !onDefault;
 };
 
 const changeToFlow = () => {

@@ -3,6 +3,9 @@ class Dot {
 		this.x;
 		this.y;
 		this.z;
+		this.curX;
+		this.curY;
+		this.curZ;
 		this.defaultX;
 		this.defaultY;
 		this.defaultZ;
@@ -20,6 +23,9 @@ class Dot {
 		this.angleZ = random(-1, 1);
 		this.startMove = 1000;
 		this.transMatrix;
+
+		this.defaultFirst = true;
+		this.waveFirst = true;
 
 		const colors = [
 			{
@@ -59,9 +65,12 @@ class Dot {
 	}
 
 	init() {
-		this.x = random(-0.7, 0.7) * this.stageWidth * 2;
-		this.y = random(-0.7, 0.7) * this.stageWidth * 2;
-		this.z = random(-0.7, 0.7) * this.stageWidth * 2;
+		this.curX = random(-0.7, 0.7) * this.stageWidth * 1.5;
+		this.curY = random(-0.7, 0.7) * this.stageWidth * 1.5;
+		this.curZ = random(-0.7, 0.7) * this.stageWidth * 1.5;
+		this.x = this.curX;
+		this.y = this.curY;
+		this.z = this.curZ;
 		this.r = random(1) * 100;
 	}
 
@@ -101,17 +110,30 @@ class Dot {
 		ambientLight(this.colorObj.r, this.colorObj.g, this.colorObj.b);
 		sphere(this.r);
 		pop();
-		push();
 		// this.rotZ();
 		// this.rotX();
 		// this.rotY();
 		if (onWave) {
+			if (this.waveFirst) {
+				push();
+				this.waveFirst = false;
+				this.x = this.defaultX;
+				this.y = this.defaultY;
+				this.z = this.defaultZ;
+			}
+		} else {
+			this.waveFirst = true;
 			pop();
-			this.x = this.defaultX;
-			this.y = this.defaultY;
-			this.z = this.defaultZ;
 		}
-		if (!onWave) {
+
+		if (onDefault) {
+			if (this.defaultFirst) {
+				push();
+				this.defaultFirst = false;
+				this.x = this.curX;
+				this.y = this.curY;
+				this.z = this.curZ;
+			}
 			rotateX(this.angleX);
 			rotateY(this.angleY);
 			rotateZ(this.angleZ);
@@ -120,6 +142,9 @@ class Dot {
 			this.angleZ += 0.00001;
 			this.startMove *= 0.95;
 			translate(0, 0, -this.startMove);
+		} else {
+			this.defaultFirst = true;
+			pop();
 		}
 		// this.transMatrix = this.transformMatrix(
 		// 	this.angleX,
