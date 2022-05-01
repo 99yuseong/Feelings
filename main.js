@@ -16,7 +16,7 @@ function setup() {
 
 	pixelRatio = pixelDensity();
 
-	dotGroup = new DotGroup(300);
+	dotGroup = new DotGroup(pow(7, 3));
 
 	windowResized();
 

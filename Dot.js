@@ -59,15 +59,10 @@ class Dot {
 	}
 
 	init() {
-		this.defaultX = random(-0.7, 0.7) * this.stageWidth;
-		this.defaultY = random(-0.7, 0.7) * this.stageWidth;
-		this.defaultZ = random(-0.7, 0.7) * this.stageWidth;
-		this.x = this.defaultX;
-		this.y = this.defaultY;
-		this.z = this.defaultZ;
-		this.r = random(1) * 200;
-		this.minR = 30;
-		this.maxR = 50;
+		this.x = random(-0.7, 0.7) * this.stageWidth * 2;
+		this.y = random(-0.7, 0.7) * this.stageWidth * 2;
+		this.z = random(-0.7, 0.7) * this.stageWidth * 2;
+		this.r = random(1) * 100;
 	}
 
 	transformMatrix(a, b, c) {
@@ -102,34 +97,34 @@ class Dot {
 	draw() {
 		push();
 		noStroke();
-		translate(this.defaultX, this.defaultY, this.defaultZ);
+		translate(this.x, this.y, this.z);
 		ambientLight(this.colorObj.r, this.colorObj.g, this.colorObj.b);
 		sphere(this.r);
 		pop();
-		rotateX(this.angleX);
-		rotateY(this.angleY);
-		rotateZ(this.angleZ);
+		push();
 		// this.rotZ();
 		// this.rotX();
 		// this.rotY();
-		this.transMatrix = this.transformMatrix(
-			this.angleX,
-			this.angleY,
-			this.angleZ
-		);
-		translate(0, 0, -this.startMove);
-
-		push();
 		if (onWave) {
-			rotateX(-this.angleX);
-			rotateY(-this.angleY);
-			rotateZ(-this.angleZ);
+			pop();
+			this.x = this.defaultX;
+			this.y = this.defaultY;
+			this.z = this.defaultZ;
 		}
 		if (!onWave) {
+			rotateX(this.angleX);
+			rotateY(this.angleY);
+			rotateZ(this.angleZ);
 			this.angleX += 0.00001;
 			this.angleY += 0.00001;
 			this.angleZ += 0.00001;
 			this.startMove *= 0.95;
+			translate(0, 0, -this.startMove);
 		}
+		// this.transMatrix = this.transformMatrix(
+		// 	this.angleX,
+		// 	this.angleY,
+		// 	this.angleZ
+		// );
 	}
 }
