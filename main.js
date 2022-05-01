@@ -39,7 +39,7 @@ function draw() {
 	background(41, 84, 163);
 	dotGroup.draw();
 	if (onWave) {
-		wave.draw();
+		// wave.draw();
 	}
 }
 

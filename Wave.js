@@ -19,7 +19,6 @@ class Wave {
 	draw() {
 		for (let i = 0; i < this.dotNum; i++) {
 			this.update();
-			console.log(this.dots[i]);
 		}
 
 		let px = this.dots[0].x;
@@ -30,6 +29,14 @@ class Wave {
 		let cz = this.dots[1].z;
 
 		for (let i = 2; i < this.dotNum; i++) {
+			const m = this.dots[i].transMatrix;
+			// console.log(gl);
+			// gl.transform(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8]);
+			rotateX(-this.dots[i].angleX);
+			rotateY(-this.dots[i].angleY);
+			rotateZ(-this.dots[i].angleZ);
+			translate(0, 0, -this.dots[i].startMove);
+
 			line(px, py, pz, cx, cy, cz);
 
 			px = this.dots[i - 1].x;
