@@ -1,14 +1,23 @@
-const freezeBtn = document.querySelector(".freeze");
+const cubeBtn = document.querySelector(".cube");
 const waveBtn = document.querySelector(".wave");
-const flowBtn = document.querySelector(".flow");
+const drawBtn = document.querySelector(".draw");
 
 let gl;
 let dotGroup;
+let cube;
 let wave;
 let pixelRatio;
 let stageWidth;
 let stageHeight;
-let onDefault = true;
+
+let sideDotNum;
+let sideLen;
+
+let drawingMode = false;
+
+let curMode = "random";
+let onRandom = true;
+let onCube = false;
 let onWave = false;
 
 function setup() {
@@ -17,7 +26,7 @@ function setup() {
 
 	pixelRatio = pixelDensity();
 
-	dotGroup = new DotGroup(pow(7, 3));
+	dotGroup = new DotGroup(pow(10, 3));
 
 	windowResized();
 
@@ -31,33 +40,64 @@ function windowResized() {
 	scale(pixelRatio, pixelRatio);
 
 	dotGroup.resize(stageWidth, stageHeight);
-	if (onWave) {
-		wave.resize();
-	}
 }
 
 function draw() {
-	background(41, 84, 163);
-	dotGroup.draw();
-	if (onWave) {
-		// wave.draw();
+	if (!drawingMode) {
+		gl.clearColor(0.16, 0.33, 0.64, 0);
+		gl.clear(gl.COLOR_BUFFER_BIT);
 	}
+	// createGraphics(500, 500, WEBGL);
+	dotGroup.draw();
 }
 
-const changeToFreeze = () => {
-	console.log("Freeze");
+const modeChange = (mode) => {
+	switch (curMode) {
+		case "random":
+			onRandom = !onRandom;
+			break;
+		case "cube":
+			onCube = !onCube;
+			break;
+		case "wave":
+			onWave = !onWave;
+			break;
+	}
+	curMode = mode;
+};
+
+const changeToCube = () => {
+	if (onCube) {
+		onCube = !onCube;
+		onRandom = !onRandom;
+		curMode = "random";
+	} else {
+		onCube = !onCube;
+		modeChange("cube");
+	}
+	if (!cube) {
+		cube = new Cube(dotGroup);
+	}
 };
 
 const changeToWave = () => {
-	wave = new Wave(dotGroup);
-	onWave = !onWave;
-	onDefault = !onDefault;
+	if (onWave) {
+		onWave = !onWave;
+		onRandom = !onRandom;
+		curMode = "random";
+	} else {
+		onWave = !onWave;
+		modeChange("wave");
+	}
+	if (!wave) {
+		wave = new Wave(dotGroup);
+	}
 };
 
-const changeToFlow = () => {
-	console.log("Flow");
+const OnDrawingMode = () => {
+	drawingMode = !drawingMode;
 };
 
-freezeBtn.addEventListener("click", changeToFreeze);
+cubeBtn.addEventListener("click", changeToCube);
 waveBtn.addEventListener("click", changeToWave);
-flowBtn.addEventListener("click", changeToFlow);
+drawBtn.addEventListener("click", OnDrawingMode);

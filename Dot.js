@@ -3,28 +3,14 @@ class Dot {
 		this.x;
 		this.y;
 		this.z;
-		this.curX;
-		this.curY;
-		this.curZ;
-		this.defaultX;
-		this.defaultY;
-		this.defaultZ;
 		this.r;
-		this.direcX = random(-1, 1) < 0 ? -1 : 1;
-		this.direcY = random(-1, 1) < 0 ? -1 : 1;
-		this.direcZ = random(-1, 1) < 0 ? -1 : 1;
-		this.speed = 10;
-		this.vx = this.direcX * this.speed;
-		this.vy = this.direcY * this.speed;
-		this.vz = this.direcZ * this.speed;
-		this.vr;
-		this.angleX = random(-1, 1);
-		this.angleY = random(-1, 1);
-		this.angleZ = random(-1, 1);
+		this.angleX;
+		this.angleY;
+		this.angleZ;
 		this.startMove = 1000;
-		this.transMatrix;
 
 		this.defaultFirst = true;
+		this.cubeFirst = true;
 		this.waveFirst = true;
 
 		const colors = [
@@ -55,6 +41,27 @@ class Dot {
 			},
 		];
 		this.colorObj = colors[Math.floor(Math.random() * 5)];
+
+		// random cordinate
+		this.ranX;
+		this.ranY;
+		this.ranZ;
+
+		// cube coordinate
+		this.cubeX;
+		this.cubeY;
+		this.cubeZ;
+
+		// wave coordinate
+		this.waveX;
+		this.waveY;
+		this.waveZ;
+		this.t = 0;
+
+		// target coordinate
+		this.targetX;
+		this.targetY;
+		this.targetZ;
 	}
 
 	resize(stageWidth, stageHeight) {
@@ -65,43 +72,17 @@ class Dot {
 	}
 
 	init() {
-		this.curX = random(-0.7, 0.7) * this.stageWidth * 1.5;
-		this.curY = random(-0.7, 0.7) * this.stageWidth * 1.5;
-		this.curZ = random(-0.7, 0.7) * this.stageWidth * 1.5;
-		this.x = this.curX;
-		this.y = this.curY;
-		this.z = this.curZ;
-		this.r = random(1) * 100;
+		this.ranX = random(-0.7, 0.7) * this.stageWidth * 2;
+		this.ranY = random(-0.7, 0.7) * this.stageWidth * 2;
+		this.ranZ = random(-0.7, 0.7) * this.stageWidth * 2;
+		this.x = this.ranX;
+		this.y = this.ranY;
+		this.z = this.ranZ;
+		this.r = random(1) * 75;
+		this.angleX = random(-1, 1);
+		this.angleY = random(-1, 1);
+		this.angleZ = random(-1, 1);
 	}
-
-	transformMatrix(a, b, c) {
-		return [
-			cos(c) * cos(b),
-			cos(c) * sin(b) * sin(a) - sin(c) * cos(a),
-			cos(c) * sin(b) * cos(a) + sin(c) * sin(a),
-			sin(c) * cos(b),
-			sin(c) * sin(b) * sin(a) + cos(c) * cos(a),
-			sin(c) * sin(b) * cos(a) - cos(c) * sin(a),
-			-sin(b),
-			cos(b) * sin(a),
-			cos(b) * cos(a),
-		];
-	}
-
-	// rotX() {
-	// 	this.y = -sin(this.angleX) * sqrt(pow(this.y, 2) + pow(this.z, 2));
-	// 	this.z = cos(this.angleX) * sqrt(pow(this.y, 2) + pow(this.z, 2));
-	// }
-
-	// rotY() {
-	// 	this.x = cos(this.angleY) * sqrt(pow(this.x, 2) + pow(this.z, 2));
-	// 	this.z = sin(this.angleY) * sqrt(pow(this.x, 2) + pow(this.z, 2));
-	// }
-
-	// rotZ() {
-	// 	this.x = cos(this.angleZ) * sqrt(pow(this.y, 2) + pow(this.x, 2));
-	// 	this.y = sin(this.angleZ) * sqrt(pow(this.y, 2) + pow(this.x, 2));
-	// }
 
 	draw() {
 		push();
@@ -110,46 +91,116 @@ class Dot {
 		ambientLight(this.colorObj.r, this.colorObj.g, this.colorObj.b);
 		sphere(this.r);
 		pop();
-		// this.rotZ();
-		// this.rotX();
-		// this.rotY();
-		if (onWave) {
-			if (this.waveFirst) {
-				push();
-				this.waveFirst = false;
-				this.x = this.defaultX;
-				this.y = this.defaultY;
-				this.z = this.defaultZ;
-			}
+
+		if (onRandom) {
+			this.drawRandom();
 		} else {
-			this.waveFirst = true;
-			pop();
+			this.reset();
 		}
 
-		if (onDefault) {
-			if (this.defaultFirst) {
-				push();
-				this.defaultFirst = false;
-				this.x = this.curX;
-				this.y = this.curY;
-				this.z = this.curZ;
-			}
-			rotateX(this.angleX);
-			rotateY(this.angleY);
-			rotateZ(this.angleZ);
-			this.angleX += 0.00001;
-			this.angleY += 0.00001;
-			this.angleZ += 0.00001;
-			this.startMove *= 0.95;
-			translate(0, 0, -this.startMove);
+		if (onCube) {
+			this.drawCube();
 		} else {
-			this.defaultFirst = true;
-			pop();
+			this.reset("cube");
 		}
-		// this.transMatrix = this.transformMatrix(
-		// 	this.angleX,
-		// 	this.angleY,
-		// 	this.angleZ
-		// );
+
+		if (onWave) {
+			this.drawWave();
+		} else {
+			this.reset("wave");
+		}
+	}
+
+	reset(section) {
+		switch (section) {
+			case "cube":
+				if (!this.cubeFirst) {
+					this.cubeFirst = true;
+					pop();
+				}
+				break;
+
+			case "wave":
+				if (!this.waveFirst) {
+					this.waveFirst = true;
+					pop();
+				}
+				break;
+
+			default:
+				if (!this.defaultFirst) {
+					this.defaultFirst = true;
+					pop();
+				}
+				break;
+		}
+	}
+
+	drawRandom() {
+		if (this.defaultFirst) {
+			push();
+			this.defaultFirst = false;
+			this.targetX = this.ranX;
+			this.targetY = this.ranY;
+			this.targetZ = this.ranZ;
+		}
+
+		if (this.x !== this.targetX) {
+			this.x += (this.targetX - this.x) * 0.08;
+			this.y += (this.targetY - this.y) * 0.08;
+			this.z += (this.targetZ - this.z) * 0.08;
+		}
+
+		rotateX(this.angleX);
+		rotateY(this.angleY);
+		rotateZ(this.angleZ);
+
+		this.angleX += 0.00001;
+		this.angleY += 0.00001;
+		this.angleZ += 0.00001;
+
+		this.startMove *= 0.95;
+		translate(0, 0, -this.startMove);
+	}
+
+	drawCube() {
+		if (this.cubeFirst) {
+			push();
+			this.cubeFirst = false;
+			this.targetX = this.cubeX;
+			this.targetY = this.cubeY;
+			this.targetZ = this.cubeZ;
+		}
+		if (this.x !== this.targetX) {
+			this.x += (this.targetX - this.x) * 0.08;
+			this.y += (this.targetY - this.y) * 0.08;
+			this.z += (this.targetZ - this.z) * 0.08;
+		}
+	}
+
+	drawWave() {
+		if (this.waveFirst) {
+			push();
+			this.waveFirst = false;
+			this.targetX = this.waveX;
+			this.targetY = this.waveY;
+			this.targetZ = this.waveZ;
+		}
+		if (abs(this.x - this.targetX) > 1) {
+			this.x += (this.targetX - this.x) * 0.08;
+			this.y += (this.targetY - this.y) * 0.08;
+			this.z += (this.targetZ - this.z) * 0.08;
+		} else {
+			this.y += 100 * sin(radians(this.t));
+			this.z += 100;
+			this.t += 5;
+
+			if (this.z > this.stageWidth * 1.5) {
+				this.z = -this.stageWidth;
+			}
+			// if (this.z < -this.stageWidth * 1.5) {
+			// 	this.z = this.stageWidth;
+			// }
+		}
 	}
 }
