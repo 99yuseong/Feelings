@@ -2,6 +2,7 @@ class DotGroup {
 	constructor(num) {
 		this.dotNum = num;
 		this.dots = [];
+		this.timer = 0;
 	}
 
 	resize(stageWidth, stageHeight) {
@@ -23,9 +24,19 @@ class DotGroup {
 	}
 
 	draw() {
+		if (onFear) {
+			fear.draw();
+		}
+
 		for (let i = 0; i < this.dotNum; i++) {
 			const dot = this.dots[i];
 			dot.draw();
+
+			if (onAnger) {
+				this.timer += 1;
+			} else {
+				this.timer = 0;
+			}
 		}
 	}
 }
