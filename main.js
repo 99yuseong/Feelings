@@ -1,21 +1,18 @@
-const cubeBtn = document.querySelector(".cube");
-const tornadoBtn = document.querySelector(".tornado");
-const happyBtn = document.querySelector(".happy");
-const angerBtn = document.querySelector(".anger");
-const sadBtn = document.querySelector(".sad");
-const fearBtn = document.querySelector(".fear");
 const inspirationBtn = document.querySelector(".inspiration");
+const cubeBtn = document.querySelector(".cube");
+const ballBtn = document.querySelector(".ball");
+const thinkBtn = document.querySelector(".think");
+const boardBtn = document.querySelector(".board");
 const drawBtn = document.querySelector(".draw");
 
 let gl;
 let dotGroup;
 let cube;
-let happy;
-let tornado;
-let anger;
-let sad;
-let fear;
+let ball;
 let inspiration;
+let think;
+let base;
+let board;
 
 let pixelRatio;
 let stageWidth;
@@ -24,17 +21,22 @@ let stageHeight;
 let sideDotNum;
 let sideLen;
 
+let isMouseClicked = false;
+
 let drawingMode = false;
 
-let curMode = "random";
-let onRandom = true;
-let onCube = false;
-let onTornado = false;
-let onHappy = false;
-let onAnger = false;
-let onSad = false;
-let onFear = false;
+let curMode = "base";
+let onBase = true;
 let onInspiration = false;
+let onCube = false;
+let onBall = false;
+let onThink = false;
+let onBoard = false;
+
+function preload() {
+	Roboto = loadFont("Assets/Roboto/Roboto-Black.ttf");
+	data = loadJSON("Assets/keyword.json");
+}
 
 function setup() {
 	canvas = createCanvas(windowWidth, windowHeight, WEBGL);
@@ -42,7 +44,7 @@ function setup() {
 
 	pixelRatio = pixelDensity();
 
-	dotGroup = new DotGroup(pow(5, 3));
+	dotGroup = new DotGroup(2025);
 
 	windowResized();
 
@@ -60,135 +62,47 @@ function windowResized() {
 
 function draw() {
 	if (!drawingMode) {
-		// gl.clearColor(0.16, 0.33, 0.64, 0);
 		gl.clearColor(0.1, 0.1, 0.1, 0);
-		// gl.clearColor(0.72, 0.91, 0.58, 1);
-		// gl.clearColor(0.6, 0.91, 0.61, 1);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 	}
 	// createGraphics(500, 500, WEBGL);
 	dotGroup.draw();
 }
 
+const mouseClicked = () => {
+	console.log(mouseX);
+	console.log(mouseY);
+};
+
 const modeChange = (mode) => {
 	switch (curMode) {
-		case "random":
-			onRandom = !onRandom;
-			break;
 		case "cube":
 			onCube = !onCube;
 			break;
-		case "tornado":
-			onTornado = !onTornado;
-			break;
-		case "happy":
-			onHappy = !onHappy;
-			break;
-		case "anger":
-			onAnger = !onAnger;
-			break;
-		case "sad":
-			onSad = !onSad;
-			break;
-		case "fear":
-			onFear = !onFear;
+		case "ball":
+			onBall = !onBall;
 			break;
 		case "inspiration":
 			onInspiration = !onInspiration;
+			break;
+		case "base":
+			onBase = !onBase;
+			break;
+		case "think":
+			onThink = !onThink;
+			break;
+		case "board":
+			onBoard = !onBoard;
 			break;
 	}
 	curMode = mode;
 };
 
-const changeToCube = () => {
-	if (onCube) {
-		onCube = !onCube;
-		onRandom = !onRandom;
-		curMode = "random";
-	} else {
-		onCube = !onCube;
-		modeChange("cube");
-	}
-	if (!cube) {
-		cube = new Cube(dotGroup);
-	}
-};
-
-const changeToHappy = () => {
-	if (onHappy) {
-		onHappy = !onHappy;
-		onRandom = !onRandom;
-		curMode = "random";
-	} else {
-		onHappy = !onHappy;
-		modeChange("happy");
-	}
-	if (!happy) {
-		happy = new Happy(dotGroup);
-	}
-};
-
-const changeToSad = () => {
-	if (onSad) {
-		onSad = !onSad;
-		onRandom = !onRandom;
-		curMode = "random";
-	} else {
-		onSad = !onSad;
-		modeChange("sad");
-	}
-	if (!sad) {
-		sad = new Sad(dotGroup);
-	}
-};
-
-const changeToTornado = () => {
-	if (onTornado) {
-		onTornado = !onTornado;
-		onRandom = !onRandom;
-		curMode = "random";
-	} else {
-		onTornado = !onTornado;
-		modeChange("tornado");
-	}
-	if (!tornado) {
-		tornado = new Tornado(dotGroup);
-	}
-};
-
-const changeToAnger = () => {
-	if (onAnger) {
-		onAnger = !onAnger;
-		onRandom = !onRandom;
-		curMode = "random";
-	} else {
-		onAnger = !onAnger;
-		modeChange("anger");
-	}
-	if (!anger) {
-		anger = new Anger(dotGroup);
-	}
-};
-
-const changeToFear = () => {
-	if (onFear) {
-		onFear = !onFear;
-		onRandom = !onRandom;
-		curMode = "random";
-	} else {
-		onFear = !onFear;
-		modeChange("fear");
-	}
-	if (!fear) {
-		fear = new Fear(dotGroup);
-	}
-};
-
 const changeToInspiration = () => {
 	if (onInspiration) {
 		onInspiration = !onInspiration;
-		onRandom = !onRandom;
-		curMode = "random";
+		onBase = !onBase;
+		curMode = "base";
 	} else {
 		onInspiration = !onInspiration;
 		modeChange("inspiration");
@@ -198,16 +112,69 @@ const changeToInspiration = () => {
 	}
 };
 
+const changeToCube = () => {
+	if (onCube) {
+		onCube = !onCube;
+		onBase = !onBase;
+		curMode = "base";
+	} else {
+		onCube = !onCube;
+		modeChange("cube");
+	}
+	if (!cube) {
+		cube = new Cube(dotGroup);
+	}
+};
+
+const changeToBall = () => {
+	if (onBall) {
+		onBall = !onBall;
+		onBase = !onBase;
+		curMode = "base";
+	} else {
+		onBall = !onBall;
+		modeChange("ball");
+	}
+	if (!ball) {
+		ball = new Ball(dotGroup);
+	}
+};
+
+const changeToThink = () => {
+	if (onThink) {
+		onThink = !onThink;
+		onBase = !onBase;
+		curMode = "base";
+	} else {
+		onThink = !onThink;
+		modeChange("think");
+	}
+	if (!think) {
+		think = new Think(dotGroup);
+	}
+};
+
+const changeToBoard = () => {
+	if (onBoard) {
+		onBoard = !onBoard;
+		onBase = !onBase;
+		curMode = "base";
+	} else {
+		onBoard = !onBoard;
+		modeChange("board");
+	}
+	if (!board) {
+		board = new Board(dotGroup);
+	}
+};
+
 const OnDrawingMode = () => {
 	drawingMode = !drawingMode;
 };
 
 drawBtn.addEventListener("click", OnDrawingMode);
-
-cubeBtn.addEventListener("click", changeToCube);
-tornadoBtn.addEventListener("click", changeToTornado);
-happyBtn.addEventListener("click", changeToHappy);
-angerBtn.addEventListener("click", changeToAnger);
-sadBtn.addEventListener("click", changeToSad);
-fearBtn.addEventListener("click", changeToFear);
 inspirationBtn.addEventListener("click", changeToInspiration);
+cubeBtn.addEventListener("click", changeToCube);
+ballBtn.addEventListener("click", changeToBall);
+thinkBtn.addEventListener("click", changeToThink);
+boardBtn.addEventListener("click", changeToBoard);

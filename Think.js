@@ -1,4 +1,4 @@
-class Cube {
+class Think {
 	constructor(dotGroup) {
 		this.dotGroup = dotGroup;
 		this.dotNum = dotGroup.dotNum;
@@ -9,9 +9,9 @@ class Cube {
 
 	init() {
 		for (let i = 0; i < this.dotNum; i++) {
-			this.dots[i].cubeX = random(-0.7, 0.7) * stageWidth;
-			this.dots[i].cubeY = random(-0.4, 0.4) * stageWidth;
-			this.dots[i].cubeZ = random(-1.5, -0.5) * stageWidth;
+			this.dots[i].thinkX = random(-1, 1) * stageWidth;
+			this.dots[i].thinkY = random(-1, 1) * stageWidth;
+			this.dots[i].thinkZ = random(-1, 1) * stageWidth;
 		}
 	}
 }

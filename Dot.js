@@ -12,213 +12,26 @@ class Dot {
 		this.angleZ;
 		this.startMove = 1000;
 
+		this.dotIdx = 0;
+		this.dots = [];
+		this.dotNum;
+
+		this.idx;
+		this.randomValue;
+
 		this.defaultFirst = true;
-		this.cubeFirst = true;
-		this.happyFirst = true;
-		this.tornadoFirst = true;
-		this.angerFirst = true;
-		this.sadFirst = true;
-		this.fearFirst = true;
 		this.inspirationFirst = true;
+		this.cubeFirst = true;
+		this.ballFirst = true;
+		this.thinkFirst = true;
+		this.boardFirst = true;
 
 		this.shape;
-		this.colors = {
-			normal: [
-				{
-					r: 255,
-					g: 255,
-					b: 255,
-				},
-				{
-					r: 203,
-					g: 208,
-					b: 234,
-				},
-				{
-					r: 171,
-					g: 214,
-					b: 219,
-				},
-				{
-					r: 240,
-					g: 225,
-					b: 154,
-				},
-				{
-					r: 251,
-					g: 183,
-					b: 183,
-				},
-			],
-			peace: [
-				// green
-				{
-					r: 1,
-					g: 115,
-					b: 95,
-				},
-				{
-					r: 53,
-					g: 143,
-					b: 126,
-				},
-				{
-					r: 103,
-					g: 170,
-					b: 159,
-				},
-				{
-					r: 153,
-					g: 199,
-					b: 191,
-				},
-				{
-					r: 203,
-					g: 226,
-					b: 223,
-				},
-			],
-			anger: [
-				// red
-				{
-					r: 220,
-					g: 8,
-					b: 0,
-				},
-				{
-					r: 227,
-					g: 57,
-					b: 51,
-				},
-				{
-					r: 234,
-					g: 106,
-					b: 102,
-				},
-				{
-					r: 241,
-					g: 156,
-					b: 152,
-				},
-				{
-					r: 247,
-					g: 206,
-					b: 204,
-				},
-			],
-			happy: [
-				// yellow
-				{
-					r: 255,
-					g: 255,
-					b: 205,
-				},
-				{
-					r: 255,
-					g: 240,
-					b: 153,
-				},
-				{
-					r: 253,
-					g: 226,
-					b: 101,
-				},
-				{
-					r: 255,
-					g: 209,
-					b: 50,
-				},
-				{
-					r: 254,
-					g: 193,
-					b: 0,
-				},
-			],
-			happy2: [
-				{
-					r: 254,
-					g: 175,
-					b: 221,
-				},
-				{
-					r: 255,
-					g: 132,
-					b: 196,
-				},
-				{
-					r: 255,
-					g: 89,
-					b: 174,
-				},
-				{
-					r: 255,
-					g: 44,
-					b: 151,
-				},
-				{
-					r: 239,
-					g: 0,
-					b: 127,
-				},
-			],
-			fear: [
-				// black
-				{
-					r: 212,
-					g: 226,
-					b: 239,
-				},
-				{
-					r: 164,
-					g: 180,
-					b: 194,
-				},
-				{
-					r: 118,
-					g: 133,
-					b: 149,
-				},
-				{
-					r: 71,
-					g: 88,
-					b: 103,
-				},
-				{
-					r: 25,
-					g: 42,
-					b: 57,
-				},
-			],
-			sad: [
-				// blue
-				{
-					r: 49,
-					g: 204,
-					b: 254,
-				},
-				{
-					r: 36,
-					g: 152,
-					b: 232,
-				},
-				{
-					r: 27,
-					g: 102,
-					b: 204,
-				},
-				{
-					r: 13,
-					g: 51,
-					b: 178,
-				},
-				{
-					r: 1,
-					g: 0,
-					b: 154,
-				},
-			],
-		};
-		this.colorObj = this.colors["peace"][Math.floor(Math.random() * 5)];
+		this.cubeReady = false;
+		this.inspirationReady = false;
+		this.ballReady = false;
+		this.thinkReady = false;
+		this.boardReady = false;
 
 		// random cordinate
 		this.ranX;
@@ -229,54 +42,39 @@ class Dot {
 		this.cubeX;
 		this.cubeY;
 		this.cubeZ;
-
-		// happy coordinate
-		this.happyX;
-		this.happyY;
-		this.happyZ;
-		this.t = 0;
-
-		//anger coordinate
-		this.angerX;
-		this.angerY;
-		this.angerZ;
-
-		//sad coordinate
-		this.sadX;
-		this.sadY;
-		this.sadZ;
-		this.angleSadX;
-		this.angleSadY;
-		this.angleSadZ;
-
-		// fear coordinate
-		this.fearX;
-		this.fearY;
-		this.fearZ;
-		this.fearReady = false;
-		this.feardx;
-		this.feardy;
-		this.feardz;
-
-		// tornado coordinate
-		this.tornadoX;
-		this.tornadoY;
-		this.tornadoZ;
-		this.tornadoAngle;
+		this.cubeAngle1;
+		this.cubeAngle2;
 
 		// inspiration coordinate
+		this.direc;
 		this.inspirationX;
 		this.inspirationY;
 		this.inspirationZ;
 		this.inspirationPrevX;
 		this.inspirationPrevY;
 		this.inspirationPrevZ;
-		this.inspirationReady = true;
 		this.inspirationAngle;
 		this.inspirationVector;
 		this.inspirationXoff;
 		this.inspirationYoff;
 		this.inspirationZoff;
+
+		// ball coordinate
+		this.ballX;
+		this.ballY;
+		this.ballZ;
+
+		// think coordinate
+		this.thinkX;
+		this.thinkY;
+		this.thinkZ;
+
+		// board coordinate
+		this.boardX;
+		this.boardY;
+		this.boardZ;
+		this.boardI;
+		this.boardJ;
 
 		// quadraticVertex
 		this.vx1;
@@ -303,26 +101,30 @@ class Dot {
 	}
 
 	init() {
-		this.ranX = random(-0.7, 0.7) * this.stageWidth * 2;
-		this.ranY = random(-0.7, 0.7) * this.stageWidth * 2;
-		this.ranZ = random(-0.7, 0.7) * this.stageWidth * 2;
+		this.ranX = random(-0.7, 0.7) * this.stageWidth;
+		this.ranY = random(-0.7, 0.7) * this.stageWidth;
+		this.ranZ = random(-1.5, -0.2) * this.stageWidth;
 		this.x = this.ranX;
 		this.y = this.ranY;
 		this.z = this.ranZ;
 		this.r = Math.floor(random(1, 25) * 3);
-		// this.dr = Math.floor(random(-10, 10));
 		this.angleX = random(-1, 1);
 		this.angleY = random(-1, 1);
 		this.angleZ = random(-1, 1);
-
-		this.shape = "sphere";
+		this.shape = "point";
 	}
 
 	draw() {
-		if (onRandom) {
-			this.drawRandom();
+		if (onBase) {
+			this.drawBase();
 		} else {
 			this.reset();
+		}
+
+		if (onInspiration) {
+			this.drawInspiration();
+		} else {
+			this.reset("inspiration");
 		}
 
 		if (onCube) {
@@ -331,52 +133,34 @@ class Dot {
 			this.reset("cube");
 		}
 
-		if (onHappy) {
-			this.drawHappy();
+		if (onBall) {
+			this.drawBall();
 		} else {
-			this.reset("happy");
+			this.reset("ball");
 		}
 
-		if (onTornado) {
-			this.drawTornado();
+		if (onThink) {
+			this.drawThink();
 		} else {
-			this.reset("tornado");
+			this.reset("think");
 		}
 
-		if (onAnger) {
-			this.drawAnger();
+		if (onBoard) {
+			this.drawBoard();
 		} else {
-			this.reset("anger");
-		}
-
-		if (onSad) {
-			this.drawSad();
-		} else {
-			this.reset("sad");
-		}
-
-		if (onFear) {
-			this.drawFear();
-		} else {
-			this.reset("fear");
-		}
-
-		if (onInspiration) {
-			this.drawInspiration();
-		} else {
-			drawingMode = false;
-			this.reset("inspiration");
+			this.reset("board");
 		}
 
 		push();
 		noStroke();
 		translate(this.x, this.y, this.z);
-		ambientLight(this.colorObj.r, this.colorObj.g, this.colorObj.b);
+		// ambientLight(this.colorObj.r, this.colorObj.g, this.colorObj.b);
 		switch (this.shape) {
 			case "box":
 				box(this.r);
 				break;
 			case "sphere":
+				directionalLight(0, 143, 255, mouseX, mouseY);
 				sphere(this.r);
 				break;
 			case "cone":
@@ -386,14 +170,12 @@ class Dot {
 				cylinder(this.r / 10, this.h);
 				break;
 			case "point":
+				// fill(0, 143, 255);
+				ambientLight(0, 143, 255);
 				sphere(3);
 				break;
 			case "quadraticVertex":
 				beginShape();
-				// curveVertex(this.x, this.y, this.z);
-				// curveVertex(this.vx1, this.vy1, this.vz1);
-				// curveVertex(this.vx2, this.vy2, this.vz2);
-				// curveVertex(this.vx3, this.vy3, this.vz3);
 				vertex(this.x, this.y, this.z);
 				bezierVertex(
 					this.vx1,
@@ -418,58 +200,44 @@ class Dot {
 
 	reset(section) {
 		switch (section) {
-			case "cube":
-				if (!this.cubeFirst) {
-					this.cubeFirst = true;
-					pop();
-				}
-				break;
-
-			case "tornado":
-				if (!this.tornadoFirst) {
-					this.tornadoFirst = true;
-					pop();
-				}
-				break;
-
-			case "happy":
-				if (!this.happyFirst) {
-					this.happyFirst = true;
-					pop();
-				}
-				break;
-
-			case "anger":
-				if (!this.angerFirst) {
-					this.angerFirst = true;
-					pop();
-				}
-				break;
-
-			case "sad":
-				if (!this.sadFirst) {
-					this.sadFirst = true;
-					pop();
-				}
-				break;
-
-			case "fear":
-				if (!this.fearFirst) {
-					this.fearFirst = true;
-					this.fearReady = false;
-					pop();
-				}
-				break;
-
 			case "inspiration":
 				if (!this.inspirationFirst) {
+					drawingMode = false;
 					this.inspirationFirst = true;
 					pop();
 				}
 				break;
-
+			case "cube":
+				if (!this.cubeFirst) {
+					drawingMode = false;
+					this.cubeFirst = true;
+					pop();
+				}
+				break;
+			case "ball":
+				if (!this.ballFirst) {
+					drawingMode = false;
+					this.ballFirst = true;
+					pop();
+				}
+				break;
+			case "think":
+				if (!this.thinkFirst) {
+					drawingMode = false;
+					this.thinkFirst = true;
+					pop();
+				}
+				break;
+			case "board":
+				if (!this.boardFirst) {
+					drawingMode = false;
+					this.boardFirst = true;
+					pop();
+				}
+				break;
 			default:
 				if (!this.defaultFirst) {
+					drawingMode = false;
 					this.defaultFirst = true;
 					pop();
 				}
@@ -477,7 +245,7 @@ class Dot {
 		}
 	}
 
-	drawRandom() {
+	drawBase() {
 		if (this.defaultFirst) {
 			push();
 			this.defaultFirst = false;
@@ -487,8 +255,8 @@ class Dot {
 			this.angleX = 0;
 			this.angleY = 0;
 			this.angleZ = 0;
-			this.colorObj = this.colors["peace"][Math.floor(Math.random() * 5)];
-			this.shape = "sphere";
+			this.shape = "point";
+			ambientLight(0, 143, 255);
 		}
 
 		if (abs(this.targetX - this.x) > 10) {
@@ -504,7 +272,6 @@ class Dot {
 			this.angleY += random(0.0000004);
 			this.angleZ += random(0.0000004);
 		}
-
 		this.startMove *= 0.95;
 		translate(0, 0, -this.startMove);
 	}
@@ -512,213 +279,117 @@ class Dot {
 	drawCube() {
 		if (this.cubeFirst) {
 			push();
+			drawingMode = false;
 			this.cubeFirst = false;
+			this.cubeReady = true;
 			this.targetX = this.cubeX;
 			this.targetY = this.cubeY;
 			this.targetZ = this.cubeZ;
-		}
-		if (abs(this.x - this.targetX) > 0) {
-			this.x += (this.targetX - this.x) * 0.08;
-			this.y += (this.targetY - this.y) * 0.08;
-			this.z += (this.targetZ - this.z) * 0.08;
-		}
-	}
-
-	drawHappy() {
-		if (this.happyFirst) {
-			push();
-			this.happyFirst = false;
-			this.targetX = this.happyX;
-			this.targetY = this.happyY;
-			this.targetZ = this.happyZ;
-			this.t = 0;
-			this.colorObj = this.colors["happy"][Math.floor(Math.random() * 5)];
-			this.shape = "sphere";
-		}
-		if (abs(this.z - this.targetZ) > 0.1) {
-			this.x += (this.targetX - this.x) * 0.08;
-			this.y += (this.targetY - this.y) * 0.08;
-			this.z += (this.targetZ - this.z) * random(0.006, 0.5);
-		} else {
-			this.x += 100;
-			this.y += 100 * sin(radians(this.t));
-			this.t += 3;
-
-			if (this.x > this.stageWidth * 1.4) {
-				this.x = -this.stageWidth * 1.4;
-			}
-		}
-	}
-
-	drawTornado() {
-		if (this.tornadoFirst) {
-			push();
-			this.tornadoFirst = false;
-			this.targetX = this.tornadoX;
-			this.targetY = this.tornadoY;
-			this.targetZ = this.tornadoZ;
-			this.tornadoAngle = 0;
-		}
-		if (abs(this.x - this.targetX) > 0.1) {
-			this.x += (this.targetX - this.x) * 0.08;
-			this.y += (this.targetY - this.y) * 0.08;
-			this.z += (this.targetZ - this.z) * 0.08;
-		} else {
-			rotateY(this.tornadoAngle);
-			this.tornadoAngle += 0.00015;
-		}
-	}
-
-	drawAnger() {
-		if (this.angerFirst) {
-			push();
-			this.angerFirst = false;
-			this.targetX = this.angerX;
-			this.targetY = this.angerY;
-			this.targetZ = this.angerZ;
-			this.colorObj = this.colors["anger"][Math.floor(Math.random() * 5)];
-			this.shape = "box";
-		}
-
-		if (dotGroup.timer < 300000) {
-			if (abs(this.x - this.targetX) > 50) {
-				this.x += (this.targetX - this.x) * 0.08;
-				this.y += (this.targetY - this.y) * 0.08;
-				this.z += (this.targetZ - this.z) * 0.08;
-			} else {
-				if (this.shape !== "cone") {
-					this.shape = "cone";
-				}
-			}
-		} else if (dotGroup.timer < 800000) {
-			if (abs(this.x) > 400 && abs(this.y) > 400 && abs(this.z) > 400) {
-				this.x += -this.x * 0.03;
-				this.y += -this.y * 0.03;
-				this.z += -this.z * 0.03;
-			}
-		} else {
-			changeToAnger();
-		}
-		this.x += Math.floor((random(-10, 10) * dotGroup.timer) / 100000);
-		this.y += Math.floor((random(-10, 10) * dotGroup.timer) / 100000);
-		this.z += Math.floor((random(-10, 10) * dotGroup.timer) / 100000);
-	}
-
-	drawSad() {
-		if (this.sadFirst) {
-			push();
-			this.sadFirst = false;
-			this.h = this.r;
-			this.dh = random(-30, 30);
-			this.targetX = this.sadX;
-			this.targetY = this.sadY;
-			this.targetZ = this.sadZ;
-			this.colorObj = this.colors["sad"][Math.floor(Math.random() * 5)];
-			this.shape = "cone";
-			this.angleSadX = random(-1, 1);
-			this.angleSadY = random(-1, 1);
-			this.angleSadZ = random(-1, 1);
-		}
-		if (
-			abs(this.x - this.targetX) > 0.05 ||
-			abs(this.y - this.targetY) > 0.05 ||
-			abs(this.z - this.targetZ) > 0.05
-		) {
-			this.x += (this.targetX - this.x) * 0.08;
-			this.y += (this.targetY - this.y) * 0.08;
-			this.z += (this.targetZ - this.z) * 0.08;
-		} else {
-			if (this.shape !== "line") {
-				this.shape = "line";
-			}
-		}
-
-		rotateX(this.angleSadX);
-		rotateY(this.angleSadY);
-		rotateZ(this.angleSadZ);
-
-		this.angleSadX += 0.00003;
-		this.angleSadY += 0.00003;
-		this.angleSadZ += 0.00003;
-
-		if (this.shape === "line") {
-			this.h += this.dh;
-			if (this.h < 10 || this.h > this.stageWidth * 2) {
-				this.dh *= -1;
-			}
-		}
-	}
-
-	drawFear() {
-		if (this.fearFirst) {
-			push();
-			this.fearFirst = false;
-			this.targetX = this.fearX;
-			this.targetY = this.fearY;
-			this.targetZ = this.fearZ;
-			this.colorObj = this.colors["fear"][Math.floor(Math.random() * 5)];
 			this.shape = "point";
 		}
-		if (!this.fearReady) {
+		if (abs(this.x - this.targetX) < 100) {
+			this.shape = "dot";
+		}
+		if (abs(this.x - this.targetX) > 0.001 && this.cubeReady) {
 			this.x += (this.targetX - this.x) * 0.08;
 			this.y += (this.targetY - this.y) * 0.08;
 			this.z += (this.targetZ - this.z) * 0.08;
-			if (abs(this.x - this.targetX) < 10) {
-				this.fearReady = true;
-			}
+		} else if (this.cubeReady) {
+			this.cubeReady = false;
+			this.cubePrevX = this.x;
+			this.cubePrevY = this.y;
+			this.cubePrevZ = this.z;
 		} else {
-			this.x += this.feardx;
-			this.y += this.feardy;
-			this.z += this.feardz;
-
-			if (this.x < -this.stageWidth * 5 || this.x > this.stageWidth * 5) {
-				this.feardx *= -1;
-			}
-			if (this.y < -this.stageWidth * 5 || this.y > this.stageWidth * 5) {
-				this.feardy *= -1;
-			}
-			if (this.z < -this.stageWidth * 5 || this.z > this.stageWidth * 5) {
-				this.feardz *= -1;
-			}
+			this.cubeAngle1 = map(
+				noise(this.x * 0.005, this.y * 0.005, this.z * 0.005),
+				0,
+				1,
+				0,
+				TWO_PI * 4
+			);
+			this.cubeAngle2 = map(
+				noise(this.x * 0.003, this.y * 0.003, this.z * 0.003),
+				0,
+				1,
+				0,
+				TWO_PI * 4
+			);
+			drawingMode = true;
+			let addVector = createVector(
+				sin(this.cubeAngle1) * cos(this.cubeAngle2),
+				sin(this.cubeAngle1) * sin(this.cubeAngle2),
+				cos(this.cubeAngle1)
+			);
+			this.x += addVector.x * 5;
+			this.y += addVector.y * 5;
+			this.z +=
+				this.z > -this.stageWidth * 0.2
+					? addVector.z * 5
+					: -addVector.z * 5;
+			strokeWeight(1.5);
+			stroke(
+				map(this.x, -this.stageWidth / 2, this.stageWidth / 2, 50, 255),
+				map(
+					this.y,
+					-this.stageHeight / 2,
+					this.stageheight / 2,
+					50,
+					255
+				),
+				map(this.x, -this.stageWidth / 2, this.stageWidth / 2, 255, 50)
+			);
+			line(
+				this.cubePrevX,
+				this.cubePrevY,
+				this.cubePrevZ,
+				this.x,
+				this.y,
+				this.z
+			);
+			this.cubePrevX = this.x;
+			this.cubePrevY = this.y;
+			this.cubePrevZ = this.z;
 		}
 	}
 
 	drawInspiration() {
 		if (this.inspirationFirst) {
 			push();
+			drawingMode = false;
 			this.inspirationFirst = false;
 			this.inspirationReady = true;
-			this.inspirationXoff = random(-1, 1);
-			this.inspirationYoff = random(-1, 1);
-			this.inspirationZoff = random(-1, 1);
+			this.inspirationXoff = this.randomValue;
+			this.inspirationYoff = this.randomValue;
+			this.inspirationZoff = this.randomValue;
 			this.targetX = this.inspirationX;
 			this.targetY = this.inspirationY;
 			this.targetZ = this.inspirationZ;
 			this.shape = "point";
+			this.direc = 1;
+			this.hue = 0;
+			this.time = 1;
+			this.offset = this.stageWidth * 2;
+			this.offsetSpeed = 10;
+		}
+		if (abs(this.x - this.targetX) < 100) {
+			this.shape = "dot";
 		}
 		if (abs(this.x - this.targetX) > 0.01 && this.inspirationReady) {
 			this.x += (this.targetX - this.x) * 0.08;
 			this.y += (this.targetY - this.y) * 0.08;
 			this.z += (this.targetZ - this.z) * 0.08;
 		} else if (this.inspirationReady) {
-			this.shape = "dot";
 			this.inspirationReady = false;
 			this.inspirationPrevX = this.x;
 			this.inspirationPrevY = this.y;
 			this.inspirationPrevZ = this.z;
 		} else {
 			drawingMode = true;
-			stroke(
-				Math.floor(noise(this.inspirationXoff) * 255),
-				Math.floor(noise(this.inspirationYoff) * 255),
-				Math.floor(noise(this.inspirationZoff) * 255)
-			);
-			strokeWeight(noise(this.inspirationXoff) * 2);
 			this.inspirationAngle =
 				noise(
-					this.inspirationXoff,
-					this.inspirationYoff,
-					this.inspirationZoff
+					this.inspirationXoff + this.x * 0.0005,
+					this.inspirationYoff + this.y * 0.0005,
+					this.inspirationZoff + this.z * 0.0005
 				) *
 				TWO_PI *
 				4;
@@ -727,9 +398,49 @@ class Dot {
 				this.inspirationAngle * 1.1
 			);
 
-			this.x += this.inspirationVector.x * 30;
-			this.y += this.inspirationVector.y * 30;
-			this.z += this.inspirationVector.z * 30;
+			if (this.x > this.offset) {
+				colorMode(HSB, 359, 100, 100, 10);
+				stroke(this.hue, 90, 80, 10);
+				strokeWeight(noise(this.inspirationXoff));
+				this.hue += noise(this.inspirationXoff);
+				if (this.hue > 359) {
+					this.hue = 0;
+				}
+				this.x += this.inspirationVector.x * 5 * this.direc;
+				this.y += this.inspirationVector.y * 5 * this.direc;
+				this.z += this.inspirationVector.z * 5 * this.direc;
+				this.inspirationXoff += 0.01;
+				this.inspirationYoff += 0.01;
+				this.inspirationZoff += 0.01;
+			} else {
+				colorMode(RGB, 255);
+				stroke(100, 100, 100);
+				strokeWeight(noise(this.inspirationXoff) * 2);
+				this.x += this.inspirationVector.x * 5 * this.direc;
+				this.y += this.inspirationVector.y * 5 * this.direc;
+				this.z += this.inspirationVector.z * 5 * this.direc;
+				this.inspirationXoff += 0.01;
+				this.inspirationYoff += 0.01;
+				this.inspirationZoff += 0.01;
+			}
+			if (
+				this.x < -this.stageWidth * 2 ||
+				this.x > this.stageWidth * 2 ||
+				this.y > this.stageHeight * 2 ||
+				this.y < -this.stageHeight * 2
+			) {
+				this.direc *= -1;
+				this.x += this.inspirationVector.x * 30 * this.direc;
+				this.y += this.inspirationVector.y * 30 * this.direc;
+			}
+			if (
+				this.z < -this.stageWidth * 1.5 ||
+				this.z > -this.stageWidth * 0.8
+			) {
+				this.direc *= -1;
+				this.z += this.inspirationVector.z * 30 * this.direc;
+			}
+
 			line(
 				this.inspirationPrevX,
 				this.inspirationPrevY,
@@ -741,33 +452,343 @@ class Dot {
 			this.inspirationPrevX = this.x;
 			this.inspirationPrevY = this.y;
 			this.inspirationPrevZ = this.z;
-			this.inspirationXoff += 0.004;
-			this.inspirationYoff += 0.004;
-			this.inspirationZoff += 0.004;
-			if (this.x > this.stageWidth) {
-				this.x = -this.stageWidth;
-				this.inspirationPrevX = this.x;
+			this.offset -= this.offsetSpeed;
+			if (
+				this.offset < -this.stageWidth * 2 ||
+				this.offset > this.stageWidth * 2
+			) {
+				this.offsetSpeed *= -1;
 			}
-			if (this.x < -this.stageWidth) {
-				this.x = this.stageWidth;
-				this.inspirationPrevX = this.x;
+		}
+	}
+
+	drawBall() {
+		if (this.ballFirst) {
+			push();
+			drawingMode = false;
+			this.ballFirst = false;
+			this.ballReady = true;
+			this.targetX = this.ballX;
+			this.targetY = this.ballY;
+			this.targetZ = this.ballZ;
+			this.shape = "point";
+			this.ballR = 1;
+			this.thinkR = 255;
+			this.thinkG = 255;
+			this.thinkB = 255;
+			this.vR = 1;
+			this.vG = 1;
+			this.vB = 1;
+			this.r = 1;
+		}
+		if (abs(this.x - this.targetX) < 0.1) {
+			this.shape = "dot";
+			this.cubePrevX = this.x;
+			this.cubePrevY = this.y;
+			this.cubePrevZ = this.z;
+		}
+
+		if (abs(this.x - this.targetX) > 0.001 && this.ballReady) {
+			this.x += (this.targetX - this.x) * 0.08;
+			this.y += (this.targetY - this.y) * 0.08;
+			this.z += (this.targetZ - this.z) * 0.08;
+		} else if (this.ballReady) {
+			this.ballReady = false;
+		} else {
+			this.d1 = this.dots[(this.dotIdx + 5) % this.dotNum];
+			this.d2 = this.dots[(this.dotIdx + 15) % this.dotNum];
+			this.d3 = this.dots[(this.dotIdx + 3) % this.dotNum];
+			push();
+			noFill();
+			stroke(this.thinkR % 255, this.thinkG % 255, this.thinkB % 255);
+			strokeWeight(this.r);
+			curve(
+				this.x,
+				this.y,
+				this.z,
+				this.d1.x,
+				this.d1.y,
+				this.d1.z,
+				this.d2.x,
+				this.d2.y,
+				this.d2.z,
+				this.d3.x,
+				this.d3.y,
+				this.d3.z
+			);
+
+			this.cubeAngle1 = map(
+				noise(this.x * 0.005, this.y * 0.005, this.z * 0.005),
+				0,
+				1,
+				0,
+				TWO_PI * 4
+			);
+			this.cubeAngle2 = map(
+				noise(this.x * 0.003, this.y * 0.003, this.z * 0.003),
+				0,
+				1,
+				0,
+				TWO_PI * 4
+			);
+			let addVector = createVector(
+				sin(this.cubeAngle1) * cos(this.cubeAngle2),
+				sin(this.cubeAngle1) * sin(this.cubeAngle2),
+				cos(this.cubeAngle1)
+			);
+			this.x += addVector.x * 2 - this.x * this.r * 0.008;
+			this.y += addVector.y * 2 - this.y * this.r * 0.008;
+			this.z += addVector.z * 2 - this.z * this.r * 0.008;
+
+			if (
+				dist(0, 0, 0, this.x, this.y, this.z) > this.stageHeight / 2 ||
+				dist(0, 0, 0, this.x, this.y, this.z) < this.stageHeight / 4
+			) {
+				this.r *= -1;
 			}
-			if (this.y > this.stageHeight) {
-				this.y = -this.stageHeight;
-				this.inspirationPrevY = this.y;
+
+			this.thinkR += 5 * this.vR;
+			this.thinkG += 8 * this.vG;
+			this.thinkB += 12 * this.vB;
+			pop();
+		}
+	}
+
+	drawThink() {
+		if (this.thinkFirst) {
+			push();
+			this.thinkFirst = false;
+			this.thinkReady = true;
+			this.targetX = this.thinkX;
+			this.targetY = this.thinkY;
+			this.targetZ = this.thinkZ;
+			this.thinkR = 0;
+			this.thinkG = 0;
+			this.thinkB = 0;
+			this.vR = 1;
+			this.vG = 1;
+			this.vB = 1;
+			this.r1 = 0.001;
+			this.shape = "point";
+			this.thinkRan = floor(random(3));
+			textFont(Roboto);
+			textSize(this.stageWidth / (15 * ((this.dotIdx % 3) + 1)));
+			textAlign(CENTER, CENTER);
+		}
+		if (abs(this.x - this.targetX) < 100) {
+			this.shape = "dot";
+		}
+		if (abs(this.targetX - this.x) > 0.1 && this.thinkReady) {
+			this.x += (this.targetX - this.x) * 0.08;
+			this.y += (this.targetY - this.y) * 0.08;
+			this.z += (this.targetZ - this.z) * 0.08;
+		} else if (this.thinkReady) {
+			this.thinkReady = false;
+		} else {
+			push();
+			fill(this.thinkR, this.thinkG, this.thinkB);
+			translate(this.x, this.y, this.z);
+			if (this.dotIdx % 3 == 0) {
+				rotateX(Math.PI / 2);
+			} else if (this.dotIdx % 3 == 1) {
+				rotateY(Math.PI / 2);
+			} else {
+				rotateZ(Math.PI / 2);
 			}
-			if (this.y < -this.stageHeight) {
-				this.y = this.stageHeight;
-				this.inspirationPrevY = this.y;
+			if (this.dotIdx % 8 == 0) {
+				text(data[this.dotIdx % 500]["body"], 0, 0);
+			} else if (this.dotIdx % 8 == 1) {
+				text(data[this.dotIdx % 500]["name"], 0, 0);
 			}
-			if (this.z > -this.stageWidth / 5) {
-				this.z = -this.stageWidth / 2;
-				this.inspirationPrevZ = this.z;
+			pop();
+
+			if (this.thinkR > 255 || this.thinkR < 0) {
+				this.vR *= -1;
 			}
-			if (this.z < -this.stageWidth / 2) {
-				this.z = -this.stageWidth / 5;
-				this.inspirationPrevZ = this.z;
+			if (this.thinkG > 255 || this.thinkG < 0) {
+				this.vG *= -1;
 			}
+			if (this.thinkB > 255 || this.thinkB < 0) {
+				this.vB *= -1;
+			}
+			this.thinkR += 1 * this.vR;
+			this.thinkG += 3 * this.vG;
+			this.thinkB += 5 * this.vB;
+			this.x += this.vR;
+			this.y += this.vG;
+			this.z += this.vB;
+		}
+	}
+
+	drawBoard() {
+		if (this.boardFirst) {
+			push();
+			this.boardFirst = false;
+			this.boardReady = true;
+			this.targetX = this.boardX;
+			this.targetY = this.boardY;
+			this.targetZ = this.boardZ;
+			this.shape = "point";
+			ambientLight(0, 143, 255);
+			strokeWeight(floor(random(0, 20)));
+		}
+
+		if (
+			abs(this.targetZ - this.z) > 0.001 &&
+			abs(this.targetX - this.x) > 0.001 &&
+			abs(this.targetY - this.y) > 0.001 &&
+			this.boardReady
+		) {
+			this.x += (this.targetX - this.x) * 0.08;
+			this.y += (this.targetY - this.y) * 0.08;
+			this.z += (this.targetZ - this.z) * 0.08;
+		} else if (this.boardReady) {
+			this.boardReady = false;
+			this.shape = "dot";
+		} else {
+			this.bPoint1 =
+				this.dots[
+					this.dotIdx + Math.sqrt(this.dotNum) >= 0 &&
+					this.dotIdx + Math.sqrt(this.dotNum) <= this.dotNum - 1
+						? this.dotIdx + Math.sqrt(this.dotNum)
+						: this.dotIdx
+				];
+			// this.bPoint2 =
+			// 	this.dots[
+			// 		this.dotIdx - Math.sqrt(this.dotNum) >= 0 &&
+			// 		this.dotIdx - Math.sqrt(this.dotNum) <= this.dotNum - 1
+			// 			? this.dotIdx - Math.sqrt(this.dotNum)
+			// 			: this.dotIdx
+			// 	];
+			this.bPoint3 =
+				this.dots[
+					this.dotIdx + 1 >= 0 &&
+					this.dotIdx + 1 <= this.dotNum - 1 &&
+					this.dotIdx % Math.sqrt(this.dotNum) != 44
+						? this.dotIdx + 1
+						: this.dotIdx
+				];
+			// this.bPoint4 =
+			// 	this.dots[
+			// 		this.dotIdx - 1 >= 0 &&
+			// 		this.dotIdx - 1 <= this.dotNum - 1 &&
+			// 		this.dotIdx % Math.sqrt(this.dotNum) != 0 &&
+			// 		this.dotIdx % Math.sqrt(this.dotNum) != 44
+			// 			? this.dotIdx - 1
+			// 			: this.dotIdx
+			// 	];
+			stroke(100, 100, 100);
+			line(
+				this.x,
+				this.y,
+				this.z,
+				this.bPoint1.x,
+				this.bPoint1.y,
+				this.bPoint1.z
+			);
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint1.x,
+			// 	this.bPoint1.y + 10,
+			// 	this.bPoint1.z
+			// );
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint1.x,
+			// 	this.bPoint1.y + 50,
+			// 	this.bPoint1.z
+			// );
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint1.x,
+			// 	this.bPoint1.y + 30,
+			// 	this.bPoint1.z
+			// );
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint1.x,
+			// 	this.bPoint1.y + 100,
+			// 	this.bPoint1.z
+			// );
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint2.x,
+			// 	this.bPoint2.y,
+			// 	this.bPoint2.z
+			// );
+			line(
+				this.x,
+				this.y,
+				this.z,
+				this.bPoint3.x,
+				this.bPoint3.y,
+				this.bPoint3.z
+			);
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint3.x,
+			// 	this.bPoint3.y + 10,
+			// 	this.bPoint3.z
+			// );
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint3.x,
+			// 	this.bPoint3.y + 50,
+			// 	this.bPoint3.z
+			// );
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint3.x,
+			// 	this.bPoint3.y + 30,
+			// 	this.bPoint3.z
+			// );
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint3.x,
+			// 	this.bPoint3.y + 100,
+			// 	this.bPoint3.z
+			// );
+			// line(
+			// 	this.x,
+			// 	this.y,
+			// 	this.z,
+			// 	this.bPoint4.x,
+			// 	this.bPoint4.y,
+			// 	this.bPoint4.z
+			// );
+			// if (
+			// 	abs(this.targetZ - this.z) > 0.01 &&
+			// 	abs(this.targetX - this.x) > 0.01 &&
+			// 	abs(this.targetY - this.y) > 0.01 &&
+			// )
+			// this.x += (this.targetX - this.x) * 0.08;
+			// this.y += (this.targetY - this.y) * 0.08;
+			// this.z += (this.targetZ - this.z) * 0.08;
+
+			// this.x += (this.targetX - this.x) * 0.08;
+			// this.y += (this.targetY - this.y) * 0.08;
+			// this.z += (this.targetZ - this.z) * 0.08;
+			this.y =
+				floor(noise(this.x, this.z, frameCount * 0.05) * stageHeight) /
+				10;
 		}
 	}
 }
